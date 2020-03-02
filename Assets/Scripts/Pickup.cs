@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Pickup : MonoBehaviour
+public abstract class Pickup : MonoBehaviour, IInteractable
 {
 
     public string name;
     public float weight;
+    public Sprite icon;
+    private GameObject inventoryObj;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
+        //InventoryUI.instance.RegisterPickUpItem(this);
+
     }
 
     public void Action()
@@ -20,6 +24,16 @@ public abstract class Pickup : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public bool isInInventory()
+    {
+        return inventoryObj != null;
+    }
+
+    public void setInventoryObj(GameObject go)
+    {
+        inventoryObj = go;
     }
 
     // Update is called once per frame
