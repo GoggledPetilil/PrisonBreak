@@ -13,12 +13,13 @@ public class LoadAndParseAPIResult : MonoBehaviour
 
     public InputField input;
     public Text resultTextField;
+    public Texture image;
 
     // Start is called before the first frame update
     void Start()
     {
 
-        StartCoroutine(GetRequest(apiCallBaseUrl + "pikachu"));
+        StartCoroutine(RequestAPI(apiCallBaseUrl + pokemonUrl.ToLower()));
 
     }
 
@@ -31,41 +32,63 @@ public class LoadAndParseAPIResult : MonoBehaviour
     {
 
         pokemonUrl = input.text;
-        parseJSON(apiCallBaseUrl + pokemonUrl);
+        StartCoroutine(RequestAPI(apiCallBaseUrl + pokemonUrl.ToLower()));
 
     }
 
-    private void parseJSON(string jsonStr)
+    private void ParseJSON(string jsonStr)
     {
         
         var jsonObj = JSON.Parse(jsonStr);
 
-        string _name = jsonObj["forms"][0]["name"].ToString();
-        string _abilities = jsonObj["abilities"][0]["name"].ToString();
+        string _name = jsonObj["forms"][0]["name"];
+        string _abilities = null;
+        for (int i = 0; i < jsonObj["abilities"].Count; i++)
+        {
+            _abilities += jsonObj["abilities"][i]["ability"]["name"];
+            if (i < jsonObj["abilities"].Count - 1)
+            {
+                _abilities += ", ";
+            }
+        }
+        string _types = null;
+        for (int i = 0; i < jsonObj["types"].Count; i++)
+        {
+            _types += jsonObj["types"][i]["type"]["name"];
+            if (i < jsonObj["types"].Count - 1)
+            {
+                _types += ", ";
+            }
+        }
 
         resultTextField.text = "Name: " + _name + "\n";
-        resultTextField.text += "Ability " + _abilities + "\n";
-        
+        resultTextField.text += "Ability: " + _abilities + "\n";
+        resultTextField.text += "Type: " + _types + "\n";
 
+        //image.
 
+        //image = UnityWebRequestTexture.GetTexture("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/549.png");
 
     }
 
-    private IEnumerator GetRequest(string url)
+    protected virtual IEnumerator RequestAPI(string WebURL)
     {
-
-        var req = UnityWebRequest.Get(url + input.text);
-        yield return req.SendWebRequest();
-
-        if (req.isNetworkError)
+        using (UnityWebRequest Request = UnityWebRequest.Get(WebURL))
         {
-            Debug.Log(": Error: " + req.error);
-        }
-        else
-        {
-            Debug.Log(":\nReceived: " + req.downloadHandler.text);
-        }
+            yield return Request.SendWebRequest();
 
+
+            string[] pages = WebURL.Split('/');
+            int page = pages.Length;
+
+            if (Request.isNetworkError)
+            {
+                Debug.Log(pages[page] + "Error" + Request.error);
+                yield break;
+            }
+
+            //ParseJSON
+            ParseJSON(Request.downloadHandler.text);
+        }
     }
-
 }
