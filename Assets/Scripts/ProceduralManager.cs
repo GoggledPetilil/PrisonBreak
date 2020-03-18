@@ -9,7 +9,6 @@ public class ProceduralManager : MonoBehaviour
     [SerializeField]private int seed;
     private float perlinSeed;
     public ProceduralWorld world;
-    //public UnityEvent regenerate;
 
     public delegate void regenerate();
     public static regenerate OnRegenerate;
@@ -30,7 +29,6 @@ public class ProceduralManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        //regenerate = new UnityEvent();
         world.Init();
 
     }

@@ -37,9 +37,9 @@ public class TerrainScape : Landscape
         t.terrainData.heightmapResolution = ProceduralManager.instance.world.Size;
         t.terrainData.SetHeights(0, 0, ProceduralManager.instance.world.heights);
 
-        for(int r = 0; r < ProceduralManager.instance.world.rocks.Count; r++)
+        for(int r = 0; r < ProceduralManager.instance.world.propList.Count; r++)
         {
-            Vector3Int rock = ProceduralManager.instance.world.rocks[r];
+            Vector3Int rock = ProceduralManager.instance.world.propList[r];
             Vector3 worldPos = new Vector3(
                 x: MathUtils.Map(
                     s: rock.x,
@@ -58,7 +58,7 @@ public class TerrainScape : Landscape
 
             worldPos.y = t.SampleHeight(worldPos);
 
-            Instantiate(ProceduralManager.instance.world.rockPrefab[rock.z], worldPos, Quaternion.identity);
+            Instantiate(ProceduralManager.instance.world.propPrefab[rock.z], worldPos, Quaternion.identity);
         }
     }
 }
