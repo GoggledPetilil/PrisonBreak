@@ -155,11 +155,11 @@ MonoBehaviour:
   world:
     type: 4
     minHeight: 0
-    maxHeight: 40
+    maxHeight: 64
     size: 128
-    detail: 11
-    seed: 10
-    rockProbability: 0.01
+    detail: 32
+    seed: 0
+    rockProbability: 0
     propPrefab: []
     propList: []
 --- !u!4 &399236715
@@ -339,13 +339,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046020362}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: 130, y: 360, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
 --- !u!1 &1613635875
 GameObject:
   m_ObjectHideFlags: 0

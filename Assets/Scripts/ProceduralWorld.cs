@@ -113,23 +113,21 @@ public class ProceduralWorld
                         break;
                     case GenType.SineBased:
                         float sineX = (x / detail);
-                        float sineY = (z / detail);
+                        float sineZ = (z / detail);
 
-                        height = (Mathf.Sin(sineX + sineY) - minHeight) * maxHeight;
+                        height = (Mathf.Sin(sineX + sineZ) - minHeight) * maxHeight;
                         break;
                     case GenType.Island:
                         float distance = Vector2.Distance(new Vector2(x / 2, z / 2), new Vector2(x, z));
+                        //float distance = Vector2.Distance(new Vector2(0, 0), new Vector2(1, 1));
                         float pSeed = ProceduralManager.instance.GetPerlinSeed();
                         float islandX = (x / detail + pSeed);
                         float islandZ = (z / detail + pSeed);
 
-                        //height = (Mathf.PerlinNoise(islandX, islandY) * (Mathf.Cos(distance / detail) - minHeight) * maxHeight);
+                        //height = Mathf.Cos(distance * (Mathf.PI / 2));
+                        height = (Mathf.PerlinNoise(islandX, islandZ) * (Mathf.Cos(distance / detail) - minHeight) * maxHeight);
 
-                        height = (Mathf.PerlinNoise(islandX, islandZ) - minHeight) * maxHeight + (Mathf.Cos(distance / detail) * maxHeight);
-
-                        //float radius = 32;
                         if (height > maxHeight)
-                            //height += (Mathf.PI * radius * radius) / distance;
                             height += UnityEngine.Random.Range(minHeight, maxHeight) / distance;
                         break;
                 }
