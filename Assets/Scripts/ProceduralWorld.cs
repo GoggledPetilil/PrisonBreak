@@ -12,8 +12,8 @@ public class ProceduralWorld
         RandomBased,
         PerlinBased,
         PerlinLayeredBased,
-        SineBased,
-        Island
+        Island,
+        PerfectIsland
     }
 
     [SerializeField]
@@ -101,40 +101,39 @@ public class ProceduralWorld
                         height = (Mathf.PerlinNoise(perlinX, perlinZ) - minHeight) * maxHeight;
                         break;
                     case GenType.PerlinLayeredBased:
-                        float perlinlX = (x / detail) + ProceduralManager.instance.GetPerlinSeed();
-                        float perlinlZ = (z / detail) + ProceduralManager.instance.GetPerlinSeed();
+                        float perlinlX = (x / size * detail) + ProceduralManager.instance.GetPerlinSeed();
+                        float perlinlZ = (z / size * detail) + ProceduralManager.instance.GetPerlinSeed();
 
-                        float height1 = (Mathf.PerlinNoise(perlinlX, perlinlZ) - minHeight) * maxHeight;
-                        float height2 = (Mathf.PerlinNoise(perlinlX, perlinlZ) / 2 - minHeight + 1) * maxHeight;
-                        float height3 = (Mathf.PerlinNoise(perlinlX, perlinlZ) / 4 - minHeight + 2) * maxHeight;
-                        float height4 = (Mathf.PerlinNoise(perlinlX, perlinlZ) / 8 - minHeight + 3) * maxHeight;
-                        float height5 = (Mathf.PerlinNoise(perlinlX, perlinlZ) / 16 - minHeight + 4) * maxHeight;
-                        height = height1 + height2 + height3 + height4 + height5;
-                        break;
-                    case GenType.SineBased:
-                        float sineX = (x / detail);
-                        float sineZ = (z / detail);
-
-                        height = (Mathf.Sin(sineX + sineZ) - minHeight) * maxHeight;
+                        for (int i = 1; i < 5; i++)
+                        {
+                            height += (Mathf.PerlinNoise(perlinlX, perlinlZ) - minHeight / (2 * i)) * maxHeight;
+                        }
                         break;
                     case GenType.Island:
-                        float distance = Vector2.Distance(new Vector2(x / 2, z / 2), new Vector2(x, z));
-                        //float distance = Vector2.Distance(new Vector2(0, 0), new Vector2(1, 1));
-                        float pSeed = ProceduralManager.instance.GetPerlinSeed();
-                        float islandX = (x / detail + pSeed);
-                        float islandZ = (z / detail + pSeed);
+                        float distance = Vector2.Distance(new Vector2(size / 2, size / 2), new Vector2(x, z));
+                        float islandX = (x / detail + ProceduralManager.instance.GetPerlinSeed());
+                        float islandZ = (z / detail + ProceduralManager.instance.GetPerlinSeed());
 
-                        //height = Mathf.Cos(distance * (Mathf.PI / 2));
                         height = (Mathf.PerlinNoise(islandX, islandZ) * (Mathf.Cos(distance / detail) - minHeight) * maxHeight);
 
                         if (height > maxHeight)
                             height += UnityEngine.Random.Range(minHeight, maxHeight) / distance;
                         break;
+                    case GenType.PerfectIsland:
+                        float pDistance = Vector2.Distance(new Vector2(size / 2, size / 2), new Vector2(x, z));
+                        float pIslandX = (x / detail + ProceduralManager.instance.GetPerlinSeed());
+                        float pIslandZ = (z / detail + ProceduralManager.instance.GetPerlinSeed());
+
+                        height = (Mathf.PerlinNoise(pIslandX, pIslandZ) * (Mathf.Cos(pDistance / detail * Mathf.PI) - minHeight) * maxHeight);
+
+                        if (height > maxHeight)
+                            height += UnityEngine.Random.Range(minHeight, maxHeight) / pDistance;
+                        break;
                 }
 
                 heights[x, z] = height / 1000;
                 float rockRand = UnityEngine.Random.value;
-                if(rockRand < rockProbability * (maxHeight / height))
+                if(rockRand < (rockProbability / 1000) * (maxHeight / height))
                 {
                     int t = UnityEngine.Random.Range(0, propPrefab.Count);
                     Vector3Int rock = new Vector3Int(x, z, t);

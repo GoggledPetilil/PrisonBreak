@@ -8,31 +8,32 @@ using SimpleJSON;
 public class LoadAndParseAPIResult : MonoBehaviour
 {
 
-    public string apiCallBaseUrl = "https://pokeapi.co/api/v2/pokemon/";
+    [SerializeField]
+    private string apiCallBaseUrl = "https://pokeapi.co/api/v2/pokemon/";
+    private string apiCallTypeUrl = "https://pokeapi.co/api/v2/type/";
     public string pokemonUrl;
 
-    public InputField input;
+    [SerializeField]
+    private InputField input;
+    [SerializeField]
+    private Button exit;
     public Text resultTextField;
-    public Texture image;
+    public Text answerResult;
 
     // Start is called before the first frame update
     void Start()
     {
 
-        StartCoroutine(RequestAPI(apiCallBaseUrl + pokemonUrl.ToLower()));
+        //StartCoroutine(RequestAPI(apiCallBaseUrl + pokemonUrl.ToLower()));
+        StartCoroutine(RequestAPI(apiCallTypeUrl));
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void UpdateURL()
     {
 
         pokemonUrl = input.text;
-        StartCoroutine(RequestAPI(apiCallBaseUrl + pokemonUrl.ToLower()));
+        StartCoroutine(RequestGuessAPI(apiCallBaseUrl + pokemonUrl.ToLower()));
 
     }
 
@@ -41,6 +42,13 @@ public class LoadAndParseAPIResult : MonoBehaviour
         
         var jsonObj = JSON.Parse(jsonStr);
 
+        // Type Look Up
+        int r = Random.Range(0, jsonObj["results"].Count - 2);
+        string _type = jsonObj["results"][r]["name"];
+        resultTextField.text = _type.Substring(0, 1).ToUpper() + _type.Substring(1).ToLower();
+
+        // Pokemon Look Up
+        /*
         string _name = jsonObj["forms"][0]["name"];
         string _abilities = null;
         for (int i = 0; i < jsonObj["abilities"].Count; i++)
@@ -64,11 +72,34 @@ public class LoadAndParseAPIResult : MonoBehaviour
         resultTextField.text = "Name: " + _name + "\n";
         resultTextField.text += "Ability: " + _abilities + "\n";
         resultTextField.text += "Type: " + _types + "\n";
+        */
+    }
 
-        //image.
-
-        //image = UnityWebRequestTexture.GetTexture("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/549.png");
-
+    private void ParseGuessJSON(string jsonStr)
+    {
+        var jsonObj = JSON.Parse(jsonStr);
+        if(jsonObj != null)
+        {
+            for (int i = 0; i < jsonObj["types"].Count; i++)
+            {
+                string j = jsonObj["types"][i]["type"]["name"];
+                string n = j.Substring(0, 1).ToUpper() + j.Substring(1).ToLower();
+                if (n == resultTextField.text)
+                {
+                    answerResult.text = "Correct.";
+                    break;
+                }
+                else
+                {
+                    answerResult.text = "Incorrect.";
+                }
+            }
+        }
+        else
+        {
+            answerResult.text = "ERROR!\nANSWER DID NOT YIELD ANY RESULTS!";
+        }
+        
     }
 
     protected virtual IEnumerator RequestAPI(string WebURL)
@@ -91,4 +122,33 @@ public class LoadAndParseAPIResult : MonoBehaviour
             ParseJSON(Request.downloadHandler.text);
         }
     }
+
+    protected virtual IEnumerator RequestGuessAPI(string WebURL)
+    {
+        using (UnityWebRequest Request = UnityWebRequest.Get(WebURL))
+        {
+            yield return Request.SendWebRequest();
+
+
+            string[] pages = WebURL.Split('/');
+            int page = pages.Length;
+
+            if (Request.isNetworkError)
+            {
+                Debug.Log(pages[page] + "Error" + Request.error);
+                yield break;
+            }
+
+            //ParseJSON
+            ParseGuessJSON(Request.downloadHandler.text);
+        }
+    }
+
+    public void ExitProgram()
+    {
+        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        p.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
+        this.enabled = false;
+    }
+
 }
