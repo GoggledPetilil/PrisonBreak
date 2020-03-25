@@ -13,8 +13,7 @@ public class LoadAndParseAPIResult : MonoBehaviour
     private string apiCallTypeUrl = "https://pokeapi.co/api/v2/type/";
     public string pokemonUrl;
 
-    [SerializeField]
-    private InputField input;
+    public InputField input;
     [SerializeField]
     private Button exit;
     public Text resultTextField;
@@ -24,7 +23,6 @@ public class LoadAndParseAPIResult : MonoBehaviour
     void Start()
     {
 
-        //StartCoroutine(RequestAPI(apiCallBaseUrl + pokemonUrl.ToLower()));
         StartCoroutine(RequestAPI(apiCallTypeUrl));
 
     }
@@ -42,37 +40,9 @@ public class LoadAndParseAPIResult : MonoBehaviour
         
         var jsonObj = JSON.Parse(jsonStr);
 
-        // Type Look Up
         int r = Random.Range(0, jsonObj["results"].Count - 2);
         string _type = jsonObj["results"][r]["name"];
         resultTextField.text = _type.Substring(0, 1).ToUpper() + _type.Substring(1).ToLower();
-
-        // Pokemon Look Up
-        /*
-        string _name = jsonObj["forms"][0]["name"];
-        string _abilities = null;
-        for (int i = 0; i < jsonObj["abilities"].Count; i++)
-        {
-            _abilities += jsonObj["abilities"][i]["ability"]["name"];
-            if (i < jsonObj["abilities"].Count - 1)
-            {
-                _abilities += ", ";
-            }
-        }
-        string _types = null;
-        for (int i = 0; i < jsonObj["types"].Count; i++)
-        {
-            _types += jsonObj["types"][i]["type"]["name"];
-            if (i < jsonObj["types"].Count - 1)
-            {
-                _types += ", ";
-            }
-        }
-
-        resultTextField.text = "Name: " + _name + "\n";
-        resultTextField.text += "Ability: " + _abilities + "\n";
-        resultTextField.text += "Type: " + _types + "\n";
-        */
     }
 
     private void ParseGuessJSON(string jsonStr)
@@ -86,12 +56,15 @@ public class LoadAndParseAPIResult : MonoBehaviour
                 string n = j.Substring(0, 1).ToUpper() + j.Substring(1).ToLower();
                 if (n == resultTextField.text)
                 {
-                    answerResult.text = "Correct.";
+                    answerResult.text = "CORRECT!";
+                    GameObject bd = GameObject.Find("Big Door");
+                    bd.GetComponent<Door>().open = true;
+                    ExitProgram();
                     break;
                 }
                 else
                 {
-                    answerResult.text = "Incorrect.";
+                    answerResult.text = "INCORRECT!";
                 }
             }
         }
@@ -146,7 +119,12 @@ public class LoadAndParseAPIResult : MonoBehaviour
 
     public void ExitProgram()
     {
+        Debug.Log("Exiting...");
+        GameManager.instance.computerCanvas.enabled = false;
         GameObject p = GameObject.FindGameObjectWithTag("Player");
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
         p.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
         this.enabled = false;
     }

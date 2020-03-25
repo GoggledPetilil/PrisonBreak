@@ -21,9 +21,14 @@ public class Computer : MonoBehaviour, IInteractable
     {
         if(computer.enabled == false)
         {
+            GameManager.instance.computerCanvas.enabled = true;
             GameObject p = GameObject.FindGameObjectWithTag("Player");
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             p.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = false;
             computer.enabled = true;
+            computer.input.text = "";
         }
     }
 }
