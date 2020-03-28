@@ -72,7 +72,6 @@ public class LoadAndParseAPIResult : MonoBehaviour
         {
             answerResult.text = "ERROR!\nANSWER DID NOT YIELD ANY RESULTS!";
         }
-        
     }
 
     protected virtual IEnumerator RequestAPI(string WebURL)
@@ -80,7 +79,6 @@ public class LoadAndParseAPIResult : MonoBehaviour
         using (UnityWebRequest Request = UnityWebRequest.Get(WebURL))
         {
             yield return Request.SendWebRequest();
-
 
             string[] pages = WebURL.Split('/');
             int page = pages.Length;
@@ -102,7 +100,6 @@ public class LoadAndParseAPIResult : MonoBehaviour
         {
             yield return Request.SendWebRequest();
 
-
             string[] pages = WebURL.Split('/');
             int page = pages.Length;
 
@@ -119,14 +116,8 @@ public class LoadAndParseAPIResult : MonoBehaviour
 
     public void ExitProgram()
     {
-        Debug.Log("Exiting...");
         GameManager.instance.computerCanvas.enabled = false;
-        GameObject p = GameObject.FindGameObjectWithTag("Player");
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
-        p.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
+        GameManager.instance.TogglePlayerMov();
         this.enabled = false;
     }
-
 }

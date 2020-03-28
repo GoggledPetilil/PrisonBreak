@@ -34,7 +34,11 @@ public class ProceduralWorld
     [SerializeField]
     public List<GameObject> propPrefab;
     public List<Vector3Int> propList;
-    
+    [SerializeField]
+    public int raftParts = 0;
+    [SerializeField]
+    public GameObject raftPrefab;
+
     public int Size
     {
         get { return size; }

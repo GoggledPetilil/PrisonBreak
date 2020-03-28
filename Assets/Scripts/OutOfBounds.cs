@@ -4,26 +4,9 @@ using UnityEngine;
 
 public class OutOfBounds : MonoBehaviour
 {
-    private GameObject player;
-    private Vector3 reset = new Vector3(120, 10, 120);
-
-    private void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
-
-    private void Update()
-    {
-        if(player.transform.position.y <= 10.0f)
-        {
-            player.transform.position = reset;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.tag == "Player")
-        {
-            other.gameObject.transform.position = reset;
-        }
+        Debug.Log("Teleporting...");
+        other.gameObject.transform.position = new Vector3(120, 10, 120);
     }
 }

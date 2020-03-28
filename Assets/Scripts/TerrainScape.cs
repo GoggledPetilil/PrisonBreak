@@ -60,5 +60,29 @@ public class TerrainScape : Landscape
 
             Instantiate(ProceduralManager.instance.world.propPrefab[rock.z], worldPos, Quaternion.identity);
         }
+
+        for (int ra = 0; ra < ProceduralManager.instance.world.raftParts; ra++)
+        {
+            Vector3Int rock = ProceduralManager.instance.world.propList[ra];
+            Vector3 worldPos = new Vector3(
+                x: MathUtils.Map(
+                    s: rock.x,
+                    a1: 0,
+                    a2: ProceduralManager.instance.world.Size,
+                    b1: t.GetPosition().x,
+                    b2: t.GetPosition().x + t.terrainData.size.x),
+                y: 0.0f,
+                z: MathUtils.Map(
+                    s: rock.y,
+                    a1: 0,
+                    a2: ProceduralManager.instance.world.Size,
+                    b1: t.GetPosition().z,
+                    b2: t.GetPosition().z + t.terrainData.size.x)
+                );
+
+            worldPos.y = t.SampleHeight(worldPos);
+
+            Instantiate(ProceduralManager.instance.world.raftPrefab, worldPos, Quaternion.identity);
+        }
     }
 }

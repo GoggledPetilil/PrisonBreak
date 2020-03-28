@@ -13,10 +13,8 @@ public class Door : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     void Start()
     {
-
         initialPosition = transform.position.y;
         initialRotation = transform.rotation.eulerAngles.y;
-
     }
 
     // Update is called once per frame
@@ -36,34 +34,19 @@ public class Door : MonoBehaviour, IInteractable
                 target: new Vector3(transform.position.x, initialPosition, transform.position.z),
                 maxDistanceDelta: 0.2f);
         }
-
-        /*
-        if (open && transform.rotation.eulerAngles.y < initialRotation + 80)
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, initialRotation + 80, 0), 5);
-        }
-        else if (!open && transform.rotation.eulerAngles.y > initialRotation)
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, initialRotation, 0), 5);
-        }
-        */
-
     }
 
 
     void Open()
     {
-
         if(id == -1 || Inventory.instance.HasKey(id))
         {
             open = !open;
         }
-
     }
 
     public void Action()
     {
         Open();
     }
-
 }
