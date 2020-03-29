@@ -22,7 +22,7 @@ public class Computer : MonoBehaviour, IInteractable
         if(computer.enabled == false)
         {
             GameManager.instance.computerCanvas.enabled = true;
-            GameManager.instance.TogglePlayerMov();
+            GameManager.instance.TogglePlayerMov(false);
             computer.enabled = true;
             computer.input.text = "";
         }

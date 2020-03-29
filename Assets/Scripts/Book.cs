@@ -11,13 +11,13 @@ public class Book : MonoBehaviour, IInteractable
         {
             GameManager.instance.bookCanvas.enabled = true;
             GameManager.instance.text.text = this.GetComponent<Text>().text;
-            GameManager.instance.TogglePlayerMov();
+            GameManager.instance.TogglePlayerMov(false);
         }
     }
 
     public void CloseBook()
     {
         GameManager.instance.bookCanvas.enabled = false;
-        GameManager.instance.TogglePlayerMov();
+        GameManager.instance.TogglePlayerMov(true);
     }
 }

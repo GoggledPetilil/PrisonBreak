@@ -117,7 +117,7 @@ public class LoadAndParseAPIResult : MonoBehaviour
     public void ExitProgram()
     {
         GameManager.instance.computerCanvas.enabled = false;
-        GameManager.instance.TogglePlayerMov();
+        GameManager.instance.TogglePlayerMov(true);
         this.enabled = false;
     }
 }

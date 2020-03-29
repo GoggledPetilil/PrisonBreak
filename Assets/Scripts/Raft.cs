@@ -17,11 +17,11 @@ public class Raft : Pickup
 
         Debug.Log("Checking remaining Raft Parts.");
         GameObject[] raft = GameObject.FindGameObjectsWithTag("Raft");
-        if (raft.Length < 1) { GameManager.instance.Win(); }
+        if (raft.Length < 1) { LevelManager.instance.LevelChange("Win"); }
     }
 
     private void OnEnable()
     {
-        this.gameObject.tag = "Untagged";
+        this.gameObject.tag = "Raft";
     }
 }
