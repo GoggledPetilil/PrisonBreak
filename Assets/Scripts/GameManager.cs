@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         if(instance == null)
         {
             instance = this;
@@ -29,9 +28,16 @@ public class GameManager : MonoBehaviour
     public void TogglePlayerMov(bool state)
     {
         GameObject p = GameObject.FindGameObjectWithTag("Player");
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = !state;
-        p.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = state;
+        if(p != null)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = !state;
+            p.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = state;
+        }
+        else
+        {
+            Debug.Log("No Player was found.");
+        }
     }
 }

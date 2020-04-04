@@ -38,7 +38,15 @@ public class LevelManager : MonoBehaviour
 
     IEnumerator FadeOutChange(string sceneName)
     {
-        GameManager.instance.TogglePlayerMov(false);
+        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        if (p != null)
+        {
+            GameManager.instance.TogglePlayerMov(false);
+        }
+        else
+        {
+            Debug.Log("No Player was found.");
+        }
         AnimatorStateInfo currInfo = ani.GetCurrentAnimatorStateInfo(0);
         yield return new WaitForSeconds(currInfo.normalizedTime);
         SceneManager.LoadScene(sceneName);

@@ -14,8 +14,6 @@ public class Raft : Pickup
     private void OnDisable()
     {
         this.gameObject.tag = "Untagged";
-
-        Debug.Log("Checking remaining Raft Parts.");
         GameObject[] raft = GameObject.FindGameObjectsWithTag("Raft");
         if (raft.Length < 1) { LevelManager.instance.LevelChange("Win"); }
     }

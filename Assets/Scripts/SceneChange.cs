@@ -10,6 +10,7 @@ public class SceneChange : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Inventory.instance.ClearInventory();
         LevelManager.instance.LevelChange(sceneName);
     }
 }

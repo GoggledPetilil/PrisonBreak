@@ -19,10 +19,15 @@ public class LoadAndParseAPIResult : MonoBehaviour
     public Text resultTextField;
     public Text answerResult;
 
+    private AudioSource aud;
+    [SerializeField]
+    private AudioClip[] audClips;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        aud = GetComponent<AudioSource>();
+        if(aud == null) { Debug.Log("Please add Audio Source Component to this script."); }
         StartCoroutine(RequestAPI(apiCallTypeUrl));
 
     }
@@ -56,6 +61,7 @@ public class LoadAndParseAPIResult : MonoBehaviour
                 string n = j.Substring(0, 1).ToUpper() + j.Substring(1).ToLower();
                 if (n == resultTextField.text)
                 {
+                    PlayAudio(0);
                     answerResult.text = "CORRECT!";
                     GameObject bd = GameObject.Find("Big Door");
                     bd.GetComponent<Door>().open = true;
@@ -64,12 +70,14 @@ public class LoadAndParseAPIResult : MonoBehaviour
                 }
                 else
                 {
+                    PlayAudio(1);
                     answerResult.text = "INCORRECT!";
                 }
             }
         }
         else
         {
+            PlayAudio(1);
             answerResult.text = "ERROR!\nANSWER DID NOT YIELD ANY RESULTS!";
         }
     }
@@ -119,5 +127,11 @@ public class LoadAndParseAPIResult : MonoBehaviour
         GameManager.instance.computerCanvas.enabled = false;
         GameManager.instance.TogglePlayerMov(true);
         this.enabled = false;
+    }
+
+    private void PlayAudio(int i)
+    {
+        aud.clip = audClips[i];
+        aud.Play();
     }
 }
