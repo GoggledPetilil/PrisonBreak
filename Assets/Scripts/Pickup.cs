@@ -13,9 +13,7 @@ public abstract class Pickup : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     void Start()
     {
-
         //InventoryUI.instance.RegisterPickUpItem(this);
-
     }
 
     public void Action()
@@ -36,12 +34,5 @@ public abstract class Pickup : MonoBehaviour, IInteractable
         inventoryObj = go;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     protected abstract Item CreateItem();
-
 }

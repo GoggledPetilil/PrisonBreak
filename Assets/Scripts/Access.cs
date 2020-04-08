@@ -10,5 +10,4 @@ public class Access : Pickup
     {
         return new AccessItem(name, weight, door);
     }
-
 }

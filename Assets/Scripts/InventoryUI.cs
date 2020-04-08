@@ -43,7 +43,6 @@ public class InventoryUI : MonoBehaviour
 
     public void Add(Item i)
     {
-
         if (items.ContainsKey(i.name) && !items[i.name].isInInventory())
         {
             GameObject go = Instantiate(itemPrefab, transform);

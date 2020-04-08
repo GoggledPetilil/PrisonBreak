@@ -48,7 +48,7 @@ public class Inventory : MonoBehaviour
             //aud.clip = audClips[0];
             //aud.Play();
             Debug.Log(item.name + " was added.");
-            //InventoryUI.instance.Add(item);
+            InventoryUI.instance.Add(item);
             items.Add(item);
             totalWeight += item.weight;
             return true;
@@ -58,13 +58,7 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Inventory"))
-        {
-            foreach(Item i in items)
-            {
-                Debug.Log(i.name);
-            }
-        }
+
     }
 
     public bool HasKey(int id)
