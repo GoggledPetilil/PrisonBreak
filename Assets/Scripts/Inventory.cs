@@ -13,17 +13,12 @@ public class Inventory : MonoBehaviour
     public float maxWeight = 10f;
     public float totalWeight;
     private GameObject inventoryObj;
-    //private AudioSource aud;
-    //[SerializeField]
-    //private AudioClip[] audClips;
 
     // Start is called before the first frame update
     void Start()
     {
         if (instance == null)
         {
-            //aud = GetComponent<AudioSource>();
-            //if(aud == null) { Debug.Log("Please add Audio Source component."); }
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
@@ -38,17 +33,13 @@ public class Inventory : MonoBehaviour
     {
         if(totalWeight + item.weight > maxWeight)
         {
-            //aud.clip = audClips[1];
-            //aud.Play();
             Debug.Log(item.name + " was not added.");
             return false;
         }
         else
         {
-            //aud.clip = audClips[0];
-            //aud.Play();
             Debug.Log(item.name + " was added.");
-            InventoryUI.instance.Add(item);
+            //InventoryUI.instance.Add(item);
             items.Add(item);
             totalWeight += item.weight;
             return true;
